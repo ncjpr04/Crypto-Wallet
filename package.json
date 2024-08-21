@@ -5,8 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "netlify-dev": "cd backend && node GenerateWallet.js",
-    "build": " npm run build",
+   "build": "vite build",
     "lint": "eslint .",
     "preview": "vite preview"
   },
