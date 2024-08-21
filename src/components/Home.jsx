@@ -4,6 +4,7 @@ import { Button } from "./ui/button";
 import { Input } from "./ui/input";
 import { Eye, EyeOff, ChevronDown, ChevronUp, Moon, Copy, Sun, Clipboard, ClipboardCheck, Trash, Plus } from "lucide-react";
 import { motion } from 'framer-motion';
+import Socials from './Socials';
 import {
     AlertDialog,
     AlertDialogAction,
@@ -30,8 +31,8 @@ function Home() {
             try {
                 const response = await fetch("http://localhost:5000/create-wallet");
                 const data = await response.json();
-                toast.success("Connected to server successfully.");
                 setMnemonicWords(data.seed.split(" "));
+                toast.success("Connected to server successfully.");
             } catch (error) {
                 console.error("Error Connecting to server:", error);
                 toast.error("Error fetching mnemonic !");
@@ -167,6 +168,7 @@ function Home() {
     return (
         <div className={`min-h-screen flex flex-col items-center pb-32 p-6 ${darkMode ? 'bg-gray-900 text-gray-100' : 'bg-gray-50 text-gray-900'}`}>
             <Toaster />
+            {/* <Socials/> */}
             <div className="w-full max-w-3xl flex flex-col items-center gap-6">
                 <div className="flex justify-between w-full mb-6">
                     <h1 className="text-4xl font-bold">Nitin Ke Wallets</h1>

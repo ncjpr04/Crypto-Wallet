@@ -3,6 +3,7 @@ import './App.css'
 import { Keypair } from "@solana/web3.js";
 import nacl from "tweetnacl";
 import Home from './components/Home';
+import Socials from './components/Socials';
 
 function App() {
   const keypair = Keypair.generate();
@@ -21,6 +22,7 @@ function App() {
   console.log(result);
   return (
     <>
+     <Socials/>
      <Home/>
     </>
   )
