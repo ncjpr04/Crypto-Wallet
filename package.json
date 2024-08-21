@@ -1,11 +1,13 @@
 {
-  "name": "wallet",
+  "name": "crypto-wallet",
   "private": true,
-  "version": "0.0.0",
+  "version": "1.0.0",
   "type": "module",
   "scripts": {
+     "build": "npm run build",
+    "start": "npm run start",
     "dev": "vite",
-    "build": "vite build",
+    // "build": "vite build",
     "lint": "eslint .",
     "preview": "vite preview"
   },
