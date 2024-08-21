@@ -6,7 +6,7 @@ export default defineConfig({
   build: {
     outDir: 'build', // Output directory for production build
     rollupOptions: {
-      external: ['framer-motion']
+      external: ['framer-motion','@radix-ui/react-alert-dialog']
     }
   },
 });
