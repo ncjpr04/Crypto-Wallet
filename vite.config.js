@@ -1,18 +1,8 @@
-import { defineConfig } from 'vite';
-import react from '@vitejs/plugin-react';
+import { defineConfig } from 'vite'
+import react from '@vitejs/plugin-react'
 
+// https://vitejs.dev/config/
 export default defineConfig({
-  plugins: [react()],
-  build: {
-    outDir: 'build', // Output directory for production build
-    rollupOptions: {
-      external: ['framer-motion','@radix-ui/react-alert-dialog']
-    }
-  },
-  resolve: {
-    alias: {
-      'framer-motion': 'framer-motion/dist/framer-motion.js',
-    },
-  },
-});
-
+  plugins: [react(), ],
+  
+})
