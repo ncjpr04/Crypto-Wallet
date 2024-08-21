@@ -1,3 +1,6 @@
 [build]
   command = "npm run build"
   publish = "build"
+
+[resolve]
+  alias = { "framer-motion" = "framer-motion/dist/framer-motion.js" }

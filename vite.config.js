@@ -9,4 +9,11 @@ export default defineConfig({
       external: ['framer-motion','@radix-ui/react-alert-dialog']
     }
   },
+  resolve: {
+    alias: {
+      'framer-motion': 'framer-motion/dist/framer-motion.js',
+    },
+  },
 });
+import { defineConfig } from 'vite';
+
