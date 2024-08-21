@@ -14,7 +14,7 @@ import {
     AlertDialogHeader,
     AlertDialogTitle,
     AlertDialogTrigger,
-} from "./ui/alert-dialog";
+} from "@radix-ui/react-alert-dialog";
 
 
 

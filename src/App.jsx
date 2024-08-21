@@ -4,6 +4,8 @@ import { Keypair } from "@solana/web3.js";
 import nacl from "tweetnacl";
 import Home from './components/Home';
 import Socials from './components/Socials';
+import '@radix-ui/themes/styles.css';
+
 
 function App() {
   const keypair = Keypair.generate();
