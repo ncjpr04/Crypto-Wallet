@@ -1,6 +1,6 @@
 [build]
-command = "npm run build"
-publish = "build"
-publish = "backend"
+  command = "npm run build"
+  publish = "build"
+
 [functions]
-generate-wallet = "node backend/GenerateWallet.js"
+  generate-wallet = "node backend/GenerateWallet.js"
