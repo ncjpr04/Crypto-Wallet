@@ -4,7 +4,6 @@ import { Button } from "./ui/button";
 import { Input } from "./ui/input";
 import { Eye, EyeOff, ChevronDown, ChevronUp, Moon, Copy, Sun, Clipboard, ClipboardCheck, Trash, Plus } from "lucide-react";
 import { motion } from 'framer-motion';
-import Socials from './Socials';
 import {
     AlertDialog,
     AlertDialogAction,
@@ -31,6 +30,7 @@ function Home() {
             try {
                 const response = await fetch("http://localhost:5000/create-wallet");
                 const data = await response.json();
+
                 setMnemonicWords(data.seed.split(" "));
                 toast.success("Connected to server successfully.");
             } catch (error) {
@@ -49,14 +49,24 @@ function Home() {
                     "Content-Type": "application/json",
                 },
                 body: JSON.stringify({ mnemonic: userMnemonic }),
+
             });
 
+            console.log("Response status:", response.status);
+            console.log("Response headers:", response.headers);
+
             if (!response.ok) {
-                throw new Error(`Error fetching wallets: ${response.status}`);
+                const errorResponse = await response.json();
+                console.log("Error response:", errorResponse);
+                throw new Error(`Error fetching wallets: ${errorResponse.error} - ${errorResponse.message}`);
             }
 
             const data = await response.json();
+            console.log("Response data:", data);
+
             setWallets(data.wallets);
+
+            setMnemonicWords(data.seed.split(" "));
             toast.success("Wallets fetched successfully.");
         } catch (error) {
             console.error("Error fetching wallets:", error);
@@ -384,7 +394,7 @@ function Home() {
                                                 </div>
 
                                             </div> */}
-                                             <div className="mb-4 flex justify-center items-start flex-col">
+                                            <div className="mb-4 flex justify-center items-start flex-col">
                                                 <p className="font-semibold mr-2">Address:</p>
                                                 <div className="flex-grow w-full flex rounded-md overflow-hidden justify-between" >
                                                     <Input
@@ -393,7 +403,7 @@ function Home() {
                                                         readOnly
                                                         className={`p-3 flex-grow rounded-md  ${darkMode ? 'bg-gray-700' : 'bg-gray-100 border border-gray-300'}`}
                                                     />
-                                                    <button onClick={() => handleCopy(wallet.key, index, 'Address')} className="ml-2">
+                                                    <button onClick={() => handleCopy(wallet.address, index, 'Address')} className="ml-2">
                                                         {copied[`${index}-key`] ? <ClipboardCheck className="h-5 w-5 text-green-500" /> : <Clipboard className="h-5 w-5" />}
                                                     </button>
                                                 </div>
@@ -423,13 +433,13 @@ function Home() {
                                                         readOnly
                                                         className={`p-3 flex-grow rounded-md  ${darkMode ? 'bg-gray-700' : 'bg-gray-100 border border-gray-300'}`}
                                                     />
-                                                    <button onClick={() => handleCopy(wallet.key, index, 'Master Mnemonic')} className="ml-2">
+                                                    <button onClick={() => handleCopy(wallet.seed, index, 'Master Mnemonic')} className="ml-2">
                                                         {copied[`${index}-key`] ? <ClipboardCheck className="h-5 w-5 text-green-500" /> : <Clipboard className="h-5 w-5" />}
                                                     </button>
                                                 </div>
 
                                             </div>
-                                           
+
 
                                         </motion.div>
                                     </>

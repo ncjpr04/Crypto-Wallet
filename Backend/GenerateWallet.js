@@ -55,42 +55,47 @@ function generateWallet() {
     index: walletIndex - 1,
   };
 }
-
+app.use(express.json());
 app.get("/create-wallet", (req, res) => {
   const wallet = generateWallet();
   res.json(wallet);
 });
-// app.post("/wallets-from-mnemonic", (req, res) => {
-//   const { mnemonic } = req.body;
-//   if (!mnemonic) {
-//     return res.status(400).json({ error: "Mnemonic is required." });
-//   }
+app.post("/wallets-from-mnemonic", (req, res) => {
+  try {
+    const { mnemonic } = req.body;
+    if (!mnemonic) {
+      return res.status(400).json({ error: "Mnemonic is required." });
+    }
 
-//   masterMnemonic = mnemonic;
-//   masterSeed = bip39.mnemonicToSeedSync(masterMnemonic);
-//   const wallets = [];
+    masterMnemonic = mnemonic;
+    masterSeed = bip39.mnemonicToSeedSync(masterMnemonic);
+    const wallets = [];
 
-//   for (let i = 0; i < 10; i++) {
-//     const root = bip32.fromSeed(masterSeed, network);
-//     const accountPath = `${path}/${i}`;
-//     const account = root.derivePath(accountPath);
-//     const node = account.derive(0).derive(0);
+    for (let i = 0; i < 10; i++) {
+      const root = bip32.fromSeed(masterSeed, network);
+      const accountPath = `${path}/${i}`;
+      const account = root.derivePath(accountPath);
+      const node = account.derive(0).derive(0);
 
-//     const btcAddress = bitcoin.payments.p2pkh({
-//       pubkey: node.publicKey,
-//       network,
-//     }).address;
+      const btcAddress = bitcoin.payments.p2pkh({
+        pubkey: node.publicKey,
+        network,
+      }).address;
 
-//     wallets.push({
-//       seed: masterMnemonic,
-//       address: btcAddress,
-//       key: node.toWIF(),
-//       index: i,
-//     });
-//   }
+      wallets.push({
+        seed: masterMnemonic,
+        address: btcAddress,
+        key: node.toWIF(),
+        index: i,
+      });
+    }
 
-//   res.json({ wallets });
-// });
+    res.json({ wallets });
+  } catch (error) {
+    console.error("Error generating wallets:", error);
+    res.status(500).json({ error: "Internal Server Error", message: error.message });
+  }
+});
 app.listen(port, () => {
   console.log(`Server running at http://localhost:${port}`);
 });
