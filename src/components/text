@@ -1,0 +1,87 @@
+import React, { useState, useEffect } from 'react';
+import { Toaster, toast } from 'sonner';
+import { Button } from "./ui/button";
+import { Input } from "./ui/input";
+import { Eye, EyeOff, ChevronDown, ChevronUp, Moon, Sun, Clipboard, ClipboardCheck } from "lucide-react";
+import { motion } from 'framer-motion';
+
+function Home() {
+  const [masterPhrase, setMasterPhrase] = useState('');
+  const [wallets, setWallets] = useState([]);
+  const [generateRandomPhrase, setGenerateRandomPhrase] = useState(false);
+
+  useEffect(() => {
+    if (generateRandomPhrase) {
+      const randomPhrase = bip39.generateMnemonic();
+      setMasterPhrase(randomPhrase);
+      setGenerateRandomPhrase(false);
+    }
+  }, [generateRandomPhrase]);
+
+  useEffect(() => {
+    if (masterPhrase) {
+      fetch(`http://localhost:5000/wallets/${masterPhrase}`)
+        .then(response => response.json())
+        .then(data => setWallets(data));
+    }
+  }, [masterPhrase]);
+
+  const handleSubmit = () => {
+    if (!masterPhrase) {
+      setGenerateRandomPhrase(true);
+    } else {
+      fetch(`http://localhost:5000/wallets/${masterPhrase}`)
+        .then(response => response.json())
+        .then(data => setWallets(data));
+    }
+  };
+
+  return (
+    <div className={`min-h-screen flex flex-col items-center p-6 ${darkMode ? 'bg-gray-900 text-gray-100' : 'bg-gray-50 text-gray-900'}`}>
+      <Toaster />
+      <div className="w-full max-w-3xl flex flex-col items-center gap-6">
+        <div className="flex justify-between w-full mb-6">
+          <h1 className="text-4xl font-bold">Crypto Wallets</h1>
+          <Button
+            variant="outline"
+            onClick={toggleTheme}
+            className={`text-lg flex items-center gap-2 p-2 ${darkMode ? 'bg-gray-900 text-gray-100' : 'bg-gray-50 text-gray-900'}`}
+          >
+            {darkMode ? <Sun className="h-5 w-5" /> : <Moon className="h-5 w-5" />}
+            <span>{darkMode ? 'Light Mode' : 'Dark Mode'}</span>
+          </Button>
+        </div>
+
+        <Input
+          type="text"
+          value={masterPhrase}
+          onChange={(e) => setMasterPhrase(e.target.value)}
+          placeholder="Enter master phrase"
+          className={`w-full max-w-md rounded-lg p-3 ${darkMode ? 'bg-gray-800' : 'bg-gray-100 border border-gray-300'}`}
+        />
+
+        <Button
+          onClick={handleSubmit}
+          className={`text-lg flex items-center gap-2 p-2 ${darkMode ? 'bg-gray-900 text-gray-100' : 'bg-gray-50 text-gray-900'}`}
+        >
+          {masterPhrase ? 'Generate Wallets' : 'Generate Random Phrase'}
+        </Button>
+
+        {wallets.length === 0 ? (
+          <div className={`w-full max-w-md rounded-lg p-6 text-center shadow-lg ${darkMode ? 'bg-gray-800' : 'bg-white border border-gray-300'}`}>
+            <h2 className="text-2xl font-semibold mb-4">No wallets found</h2>
+            <p className="mb-4">Enter a valid master phrase or generate a random one.</p>
+          </div>
+        ) : (
+          <>
+            {wallets.map((wallet, index) => (
+              // ... (rest of the code remains the same)
+            ))}
+          </>
+        )}
+      </div>
+    </div>
+  );
+}
+
+export default Home;
