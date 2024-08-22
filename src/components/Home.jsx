@@ -32,10 +32,10 @@ function Home() {
                 const data = await response.json();
 
                 setMnemonicWords(data.seed.split(" "));
-                toast.success("Connected to server successfully.");
+                toast.success("Successfully connected to server.");
             } catch (error) {
                 console.error("Error Connecting to server:", error);
-                toast.error("Error fetching mnemonic !");
+                toast.error("Error Connecting to server !");
             }
         };
         fetchMnemonic();
@@ -49,24 +49,18 @@ function Home() {
                     "Content-Type": "application/json",
                 },
                 body: JSON.stringify({ mnemonic: userMnemonic }),
-
             });
-
-            console.log("Response status:", response.status);
-            console.log("Response headers:", response.headers);
-
+            // console.log("Response status:", response.status);
+            // console.log("Response headers:", response.headers);
             if (!response.ok) {
                 const errorResponse = await response.json();
-                console.log("Error response:", errorResponse);
+                // console.log("Error response:", errorResponse);
                 throw new Error(`Error fetching wallets: ${errorResponse.error} - ${errorResponse.message}`);
+                toast.error("Error fetching wallets !");
             }
-
             const data = await response.json();
-            console.log("Response data:", data);
-
+            // console.log("Response data:", data);
             setWallets(data.wallets);
-
-            setMnemonicWords(data.seed.split(" "));
             toast.success("Wallets fetched successfully.");
         } catch (error) {
             console.error("Error fetching wallets:", error);
@@ -88,7 +82,7 @@ function Home() {
         try {
             const response = await fetch("http://localhost:5000/create-wallet");
             const data = await response.json();
-            console.log("Wallet created:", data);
+            // console.log("Wallet created:", data);
             toast.success("Wallet generated successfully.");
             setWallets([...wallets, data]);
             setMnemonicWords(data.seed.split(" ")); // Update the mnemonic words state
@@ -256,10 +250,16 @@ function Home() {
 
 
                                                 className="flex flex-col w-full items-center justify-center"
-                                                onClick={() => {
-                                                    toast.success("Mnemonic Copied to clipboard.")
-                                                    navigator.clipboard.writeText(mnemonicWords);
-                                                }}
+                                                onClick={async () => {
+                                                    try {
+                                                      const mnemonicString = mnemonicWords.join(' ');
+                                                      await navigator.clipboard.writeText(mnemonicString);
+                                                      toast.success("Mnemonic Copied to clipboard.");
+                                                    } catch (error) {
+                                                      console.error("Error copying to clipboard:", error);
+                                                      toast.error("Error copying Mnemonic to clipboard");
+                                                    }
+                                                  }}
                                             >
                                                 <motion.div
                                                     initial={{ opacity: 0, y: -20 }}

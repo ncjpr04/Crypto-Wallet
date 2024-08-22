@@ -19,7 +19,7 @@ const port = 5000;
 
 app.use(
   cors({
-    origin: "http://localhost:5173",
+    origin: ["http://localhost:5173","https://crypto-wallet-nitin.netlify.app/"],
     methods: ["GET", "POST"],
     allowedHeaders: ["Origin", "X-Requested-With", "Content-Type"],
     credentials: true,
@@ -90,7 +90,7 @@ app.post("/wallets-from-mnemonic", (req, res) => {
       });
     }
 
-    res.json({ wallets });
+    res.status(200).json({ message: "Wallets generated successfully", wallets });
   } catch (error) {
     console.error("Error generating wallets:", error);
     res.status(500).json({ error: "Internal Server Error", message: error.message });
