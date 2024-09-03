@@ -23,29 +23,31 @@ import Socials from "./Socials"
 
 
 function Home() {
-
+    const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000';
     const [userMnemonic, setUserMnemonic] = useState('');
     const [mnemonicWords, setMnemonicWords] = useState([]);
     const [showMnemonic, setShowMnemonic] = useState(false);
 
     useEffect(() => {
-        const fetchMnemonic = async () => {
+        const confirmConnection = async () => {
             try {
-                const response = await fetch("http://localhost:5000/create-wallet");
-                const data = await response.json();
-                setMnemonicWords(data.seed.split(" "));
-                toast.success("Successfully connected to server.");
+              const response = await fetch(`${API_URL}/confirm-connection`);
+              if (response.ok) {
+                toast.success("Server Connected Successfully !");
+              } else {
+                throw new Error("Failed to connect to server.");
+              }
             } catch (error) {
-                console.error("Error Connecting to server:", error);
-                toast.error("Error Connecting to server !");
+              console.error("Error connecting to server:", error);
+              toast.error("Failed to connect to server.");
             }
-        };
-        fetchMnemonic();
-    }, []);
+          };
+          confirmConnection();
+        }, []);
 
     const fetchWalletsFromMnemonic = async () => {
         try {
-            const response = await fetch("http://localhost:5000/wallets-from-mnemonic", {
+            const response = await fetch(`${API_URL}/wallets-from-mnemonic`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
@@ -82,7 +84,7 @@ function Home() {
     // Function to create a wallet
     const createWallet = async () => {
         try {
-            const response = await fetch("http://localhost:5000/create-wallet");
+            const response = await fetch(`${API_URL}/create-wallet`);
             const data = await response.json();
             // console.log("Wallet created:", data);
             toast.success("Wallet generated successfully.");
